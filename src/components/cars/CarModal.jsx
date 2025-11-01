@@ -30,10 +30,6 @@ const CarModal = ({ show, handleClose, user, onSave }) => {
   }, [user, show]);
 
   const handleSubmit = (e) => {
-    if (!isNotEmpty(car.brand)) return alert("Brand is required");
-    if (!isNotEmpty(car.model)) return alert("Model is required");
-    if (!isValidYear(car.year)) return alert("Year is invalid");
-    if (!isPositiveNumber(car.seats)) return alert("Seats must be a positive number");
     e.preventDefault();
     onSave(formData);
     handleClose();
