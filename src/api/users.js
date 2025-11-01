@@ -1,29 +1,29 @@
-const API_URL = "https://localhost:7019/api/Cars"; // Ajusta tu endpoint
+import { httpClient } from "./httpClient"; // Ajusta la ruta según tu proyecto
 
-export const getUsers = async () => {
-  const res = await fetch(API_URL);
-  return res.json();
+// Obtener todos los carros
+export const getCars = async () => {
+  return httpClient("Cars");
 };
 
-export const createUser = async (user) => {
-  const res = await fetch(API_URL, {
+// Crear un nuevo carro
+export const createCar = async (car) => {
+  return httpClient("Cars", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(user),
+    body: JSON.stringify(car),
   });
-  return res.json();
 };
 
-export const updateUser = async (id, user) => {
-  const res = await fetch(`${API_URL}/${id}`, {
+// Actualizar un carro existente
+export const updateCar = async (id, car) => {
+  return httpClient(`Cars/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(user),
+    body: JSON.stringify(car),
   });
-  return res.json();
 };
 
-export const deleteUser = async (id) => {
-  const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-  return res.json();
+// Eliminar un carro
+export const deleteCar = async (id) => {
+  return httpClient(`Cars/${id}`, {
+    method: "DELETE",
+  });
 };
