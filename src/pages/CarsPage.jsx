@@ -4,6 +4,7 @@ import CarModal from "@components/cars/CarModal"; // unificado Edit/Nuevo
 import DeleteModal from "@components/cars/DeleteModal";
 import UserTable from "@components/users/UserTable";
 import { useTheme } from "../context/ThemeContext";
+import CustomModal from "@components/common/Modal";
 import { getCars, createCar, updateCar, deleteCar } from "../api/users"; 
 
 const App = () => {
@@ -14,11 +15,16 @@ const App = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [mensaje, setMensaje] = useState(""); 
 
   const fetchUsers = async () => {
-    const data = await getCars(); 
-    setUsers(data);
-    setFilteredUsers(data);
+    getCars().then((res) => {
+      console.log("res", res);
+      
+      setUsers(res || []);
+      setFilteredUsers(res || []);
+    });
   };
 
   useEffect(() => {
@@ -35,11 +41,12 @@ const App = () => {
   };
 
   const handleDeleteUser = async () => {
+    console.log("selectedUser", selectedUser);
     if (selectedUser) {
       await deleteCar(selectedUser.id); 
       fetchUsers();
-      setDeleteModalOpen(false);
-    }
+      setDeleteModalOpen(false)
+    } 
   };
 
   const handleFilter = (filtered) => {
@@ -50,11 +57,18 @@ const App = () => {
     setSelectedUser(null);
     setCarModalOpen(true);
   };
-
-  const handleEditUser = (user) => {
-    setSelectedUser(user);
-    setCarModalOpen(true);
+  const handleEditUser = (user, name) => {      
+    if (user || name === null) {
+      setSelectedUser(user);
+      setCarModalOpen(true);
+    } else {
+      setMensaje("Seleccione un usuario para editar.");
+      setAlertOpen(true);
+      const timer = setTimeout(() => setAlertOpen(false), 2000);
+      return () => clearTimeout(timer);
+    }
   };
+
 
   return (
     <div className={theme === "dark" ? "bg-dark text-white min-vh-100" : "bg-light text-dark min-vh-100"}>
@@ -82,8 +96,8 @@ const App = () => {
           users={filteredUsers}
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
-          onNew={handleNewUser}
-          onEdit={handleEditUser}
+          onNew={handleNewUser}      // ESTE es para nuevo
+          onEdit={handleEditUser}    // ESTE es para editar
           setShowDeleteModal={setDeleteModalOpen}
         />
 
@@ -101,8 +115,17 @@ const App = () => {
             show={deleteModalOpen}
             handleClose={() => setDeleteModalOpen(false)}
             onDelete={handleDeleteUser}
+            setShowDeleteModal={setDeleteModalOpen}
           />
         )}
+        {/* Modal de alerta temporal */}
+        <CustomModal
+          show={alertOpen}
+          handleClose={() => setAlertOpen(false)}
+          title="Atención"
+        >
+          <p>{mensaje}</p>
+        </CustomModal>
       </div>
     </div>
   );

@@ -25,7 +25,7 @@ const UserTable = ({ users, selectedUser, setSelectedUser, onEdit, setShowDelete
     <div className="card border rounded-2" style={{ background: "#f8f8f8" }}>
       <div className="card-header py-3" style={{ background: "#f8f8f8" }}>
         <div className="d-flex justify-content-start align-items-center">
-          <Button variant="outline-primary" className="px-4 me-2" onClick={() => onEdit(null)}>
+          <Button variant="outline-primary" className="px-4 me-2" onClick={() => onEdit(null, null)}>
             <i className="bi bi-plus-lg me-2"></i> Nuevo Carro
           </Button>
 
@@ -33,7 +33,7 @@ const UserTable = ({ users, selectedUser, setSelectedUser, onEdit, setShowDelete
             variant="outline-primary"
             className="px-4 me-2"
             disabled={!selectedUser}
-            onClick={() => onEdit(selectedUser)}
+            onClick={() => onEdit(selectedUser, "Editar")}
           >
             <i className="bi bi-pencil"></i> Editar
           </Button>

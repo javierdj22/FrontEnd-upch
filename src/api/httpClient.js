@@ -1,15 +1,13 @@
-const BASE_URL = "https://zjm9qwzqrb.execute-api.us-east-1.amazonaws.com/dev/api";
+const BASE_URL = "https://zjm9qwzqrb.execute-api.us-east-1.amazonaws.com/dev/api/";
+// const BASE_URL = "https://localhost:7019/api/";
 
-export const httpClient = async (endpoint, options = {}) => {
-  const res = await fetch(`${BASE_URL}/${endpoint}`, {
-    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+export const httpClient = (endpoint, options = {}) => {
+  const url = `${BASE_URL}${endpoint}`;
+  return fetch(url, {
     ...options,
+    headers: {
+      "Accept": "application/json",
+      ...(options.headers || {}),
+    },
   });
-
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`HTTP error ${res.status}: ${errorText}`);
-  }
-
-  return res.json();
 };
